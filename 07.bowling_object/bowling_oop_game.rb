@@ -51,7 +51,7 @@ class Game
   end
 
   def strike_bonus_point(_current_frame, next_frame, next_next_frame, _index)
-    if next_frame.first_shot.mark == 10
+    if strike_check?(next_frame)
       next_next_frame.nil? ? next_frame.second_shot.mark : next_next_frame.first_shot.mark
     else
       next_frame.second_shot.mark
@@ -60,9 +60,9 @@ class Game
 
   def calc_frame_score(current_frame, next_frame, next_next_frame, index)
     if index <= 8
-      current_frame_score = if current_frame.first_shot.mark == 10
+      current_frame_score = if strike_check?(current_frame)
                               current_frame.first_shot.mark + next_frame.first_shot.mark + strike_bonus_point(current_frame, next_frame, next_next_frame, index)
-                            elsif current_frame.first_shot.mark + current_frame.second_shot.mark == 10
+                            elsif spare_check?(current_frame)
                               current_frame.first_shot.mark + current_frame.second_shot.mark + next_frame.first_shot.mark
                             else
                               current_frame.first_shot.mark + current_frame.second_shot.mark
@@ -71,5 +71,13 @@ class Game
       current_frame_score = current_frame.first_shot.mark + current_frame.second_shot.mark + (next_frame.nil? ? 0 : next_frame.first_shot.mark)
     end
     current_frame_score
+  end
+
+  def strike_check?(frame)
+    frame.first_shot.mark == 10 ? true : false
+  end
+
+  def spare_check?(frame)
+    frame.first_shot.mark + frame.second_shot.mark == 10 ? true : false
   end
 end
