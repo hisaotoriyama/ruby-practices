@@ -7,9 +7,7 @@ require './bowling_oop_frame'
 class Game
   def initialize(marks)
     @marks = marks
-    splitted_marks = marks.split('')
-    splitted_scores = insert_zero_after_strike_shot(splitted_marks)
-    @frames = create_frames(splitted_scores)
+    @frames = create_frames
   end
 
   MAX_INDEX_NUMBERS_FOR_9_FRAMES = 17
@@ -28,7 +26,9 @@ class Game
     splitted_scores
   end
 
-  def create_frames(splitted_scores)
+  def create_frames
+    splitted_marks = @marks.split('')
+    splitted_scores = insert_zero_after_strike_shot(splitted_marks)
     frames = []
     splitted_scores.each_slice(2) do |s|
       frames << Frame.new(s[0], s[1])
