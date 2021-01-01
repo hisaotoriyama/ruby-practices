@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './bowling_oop'
+require './bowling_oop_game'
 require 'minitest/autorun'
 
 class BowlingTest < Minitest::Test
@@ -23,24 +23,6 @@ class BowlingTest < Minitest::Test
     splitted_marks = marks.split('')
     splitted_scores = game.insert_zero_after_strike_shot(splitted_marks)
     assert_equal([0, 10, 1, 5, 0, 0, 0, 0, 10, 0, 10, 0, 10, 0, 5, 1, 8, 1, 0, 4], splitted_scores)
-  end
-
-  def test_calc_frames_score_0X150000XXX51810X4 # rubocop:disable Naming/MethodName
-    marks = '0X150000XXX51810X4'
-    game = Game.new(marks)
-    splitted_marks = marks.split('')
-    splitted_scores = game.insert_zero_after_strike_shot(splitted_marks)
-    @frames = game.create_frames(splitted_scores)
-    assert_equal 117, game.calc_frames_score
-  end
-
-  def test_calc_frames_score_0X150000XXX518104 # rubocop:disable Naming/MethodName
-    marks = '0X150000XXX518104'
-    game = Game.new(marks)
-    splitted_marks = marks.split('')
-    splitted_scores = game.insert_zero_after_strike_shot(splitted_marks)
-    @frames = game.create_frames(splitted_scores)
-    assert_equal 107, game.calc_frames_score
   end
 
   def test_calc_1 # rubocop:disable Naming/VariableNumber

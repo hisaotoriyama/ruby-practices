@@ -1,28 +1,8 @@
 # !/usr/bin/env ruby
 # frozen_string_literal: true
 
-class Shot
-  attr_reader :mark
-
-  def initialize(mark)
-    @mark = mark
-  end
-
-  def score
-    return 10 if mark == 'X'
-
-    mark.to_i
-  end
-end
-
-class Frame
-  attr_reader :first_shot, :second_shot
-
-  def initialize(first_shot, second_shot)
-    @first_shot = Shot.new(first_shot)
-    @second_shot = Shot.new(second_shot)
-  end
-end
+require './bowling_oop_shot'
+require './bowling_oop_frame'
 
 class Game
   def initialize(marks)
