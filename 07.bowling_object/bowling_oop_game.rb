@@ -74,10 +74,10 @@ class Game
   end
 
   def strike_check?(frame)
-    frame.first_shot.mark == 10 ? true : false
+    frame.first_shot.mark == 10
   end
 
   def spare_check?(frame)
-    frame.first_shot.mark + frame.second_shot.mark == 10 ? true : false
+    frame.first_shot.mark + frame.second_shot.mark == 10
   end
 end
