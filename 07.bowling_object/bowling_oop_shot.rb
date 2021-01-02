@@ -10,7 +10,6 @@ class Shot
 
   def score
     return 10 if mark == 'X'
-
     mark.to_i
   end
 end
