@@ -58,33 +58,41 @@ class FilesExpression
         file = File.new(f)
         file_content << file.extract_file_permission.to_s.rjust(10, '  ')
         file_content << file.extract_file_hard_link.to_s.rjust(3, '  ')
-        file_content << file.extract_file_owner_name.to_s.rjust(15, '  ')
-        file_content << file.extract_file_owner_group.to_s.rjust(10, '  ')
+        file_content << file.extract_file_owner_name.to_s.rjust(max_number_uid + 1, '  ')
+        file_content << file.extract_file_group_name.to_s.rjust(max_number_gid + 2, '  ')
         file_content << file.extract_file_size.to_s.rjust(6, '  ')
         file_content << file.extract_file_month.to_s.rjust(3, '  ')
         file_content << file.extract_file_day.to_s.rjust(3, '  ')
-        file_content << file.extract_file_time.to_s.ljust(6, '  ')
-        file_content << f
+        file_content << file.extract_file_time.to_s.rjust(6, '  ')
+        file_content << " #{f}"
         file_content.join
       end
       file_formatter = FileFormatter.new
       file_formatter.vertical_format(files_blocks, reorganized_selected_files)
     else
-      file_transpose(@reorderd_selected_files)
+      horizontal_format(@reorderd_selected_files)
     end
   end
 
-  def file_transpose(files)
-    string_length_max = files.map(&:length).max
-    column = `tput cols`.to_i / (string_length_max + 2)
-    lines = (files.count.to_f / column).ceil
-    file_transpose_show(lines, string_length_max, files)
+  def horizontal_format(files)
+    max_in_all_file_names = files.map(&:length).max
+    column = `tput cols`.to_i / (max_in_all_file_names + 2)
+    num_of_columns = (files.count.to_f / column).ceil
+    horizontal_format_expression(num_of_columns, max_in_all_file_names, files)
   end
 
-  def file_transpose_show(lines, length_max, files)
-    files.each_slice(lines).to_a.transpose.each do |n|
+  def horizontal_format_expression(num_of_columns, length_max, files)
+    files.each_slice(num_of_columns).to_a.transpose.each do |n|
       puts n.map { |item| item.to_s.ljust(length_max + 2) }.join
     end
+  end
+
+  def max_number_uid
+    @reorderd_selected_files.map { |file| Etc.getpwuid(File.stat(file).uid).name.length }.max
+  end
+
+  def max_number_gid
+    @reorderd_selected_files.map { |file| Etc.getgrgid(File.stat(file).gid).name.length }.max
   end
 end
 
@@ -106,7 +114,7 @@ class File
     Etc.getpwuid(@stat.uid).name
   end
 
-  def extract_file_owner_group
+  def extract_file_group_name
     Etc.getgrgid(@stat.gid).name
   end
 
