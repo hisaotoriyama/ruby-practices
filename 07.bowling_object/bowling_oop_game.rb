@@ -51,7 +51,7 @@ class Game
   end
 
   def strike_bonus_point(_current_frame, next_frame, next_next_frame, _index)
-    if if next_frame.strike_check?
+    if next_frame.strike_check?
       next_next_frame.nil? ? next_frame.second_shot.mark : next_next_frame.first_shot.mark
     else
       next_frame.second_shot.mark
