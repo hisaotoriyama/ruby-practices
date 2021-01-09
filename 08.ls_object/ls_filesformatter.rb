@@ -3,7 +3,6 @@
 
 require 'optparse'
 require 'etc'
-require 'active_support/core_ext/array/grouping'
 
 class FilesFormatter
   def vertical_format(files_blocks, reorganized_selected_files)
@@ -19,7 +18,10 @@ class FilesFormatter
   end
 
   def horizontal_format_expression(num_of_columns, length_max, files)
-    files.in_groups_of(num_of_columns).transpose.each do |n|
+    add_nil_num = num_of_columns - (files.length % num_of_columns)
+    add_nil_num.times { |_n| files << nil }
+    files_group = files.each_slice(num_of_columns).map { |arr| arr }
+    files_group.transpose.each do |n|
       puts n.map { |item| item.to_s.ljust(length_max + 2) }.join
     end
   end

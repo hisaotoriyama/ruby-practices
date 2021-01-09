@@ -3,7 +3,6 @@
 
 require 'optparse'
 require 'etc'
-require 'active_support/core_ext/array/grouping'
 
 class Files
   attr_reader :params, :all_files

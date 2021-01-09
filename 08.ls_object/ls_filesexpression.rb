@@ -3,7 +3,6 @@
 
 require 'optparse'
 require 'etc'
-require 'active_support/core_ext/array/grouping'
 require './ls_reverse'
 require './ls_file'
 require './ls_filesformatter'
