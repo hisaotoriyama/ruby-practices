@@ -4,19 +4,21 @@
 require 'optparse'
 require 'etc'
 
-class Files
-  attr_reader :params, :all_files
+module Ls
+  class Files
+    attr_reader :params, :all_files
 
-  def initialize(params)
-    @params = params
-    @all_files = Dir.glob('*', File::FNM_DOTMATCH).sort
-  end
+    def initialize(params)
+      @params = params
+      @all_files = Dir.glob('*', ::File::FNM_DOTMATCH).sort
+    end
 
-  def choose_files(params)
-    if params['a']
-      Dir.glob('*', File::FNM_DOTMATCH).sort
-    else
-      Dir.glob('*').sort
+    def choose_files(params)
+      if params['a']
+        Dir.glob('*', ::File::FNM_DOTMATCH).sort
+      else
+        Dir.glob('*').sort
+      end
     end
   end
 end
