@@ -30,7 +30,7 @@ module Wc
           summary_text(summary_file_details_in_hash, file_contents_in_text)
 
           wc_text = Wc::Text.new(file_contents_in_text)
-          fileorfilesformalize(wc_text.text_detail, text).to_s
+          "#{fileorfilesformalize(wc_text.text_detail, text)}"
 
           row += 1
         else
