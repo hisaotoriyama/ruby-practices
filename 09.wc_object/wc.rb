@@ -5,29 +5,27 @@ require 'optparse'
 
 module Wc
   class Main
-    def wc_operation
-      textexpression = Wc::TextsExpression.new
-      textexpression.expression
+    def operate_wc
+      Wc::TextsExpression.new.expression
     end
   end
 end
 
 module Wc
-  class FileNameTextOrTextInLine
-    attr_reader :argv, :with_l
+  class TextsInLine
+    attr_reader :file_names_in_text, :with_l
 
     def initialize
       opt = OptionParser.new
       opt.on('-l') { |v| @with_l = v }
-      @argv = opt.parse!(ARGV)
+      @file_names_in_text = opt.parse!(ARGV)
     end
 
-    def extract_text_in_line
-      text_in_line = []
-      if argv.empty?
+    def read_stdin
+      if file_names_in_text.empty?
         $stdin.readlines
       else
-        argv
+        file_names_in_text
       end
     end
   end
@@ -35,73 +33,55 @@ end
 
 module Wc
   class TextsExpression
-    attr_reader :text_in_line, :argv, :with_l
+    attr_reader :texts_in_line_after_read_stdin, :file_names_in_text, :with_l
 
     def initialize
-      filenametextortextinline = Wc::FileNameTextOrTextInLine.new
-      text_in_line = filenametextortextinline.extract_text_in_line
-      @argv = filenametextortextinline.argv
-      @with_l = filenametextortextinline.with_l
-      @text_in_line = text_in_line
+      texts_in_line = Wc::TextsInLine.new
+      texts_in_line_after_read_stdin = texts_in_line.read_stdin
+      @file_names_in_text = texts_in_line.file_names_in_text
+      @with_l = texts_in_line.with_l
+      @texts_in_line_after_read_stdin = texts_in_line_after_read_stdin
     end
 
     def expression
-      text_in_line_data = []
+      texts_in_line_data = []
       row = 0
-      total_number = {
-        line_count: 0,
-        word_count: 0,
-        byte_count: 0
-      }
-      text_in_line.each do |text|
-        if argv == []
-          wc_summary = Wc::SummaryFilesData.new(total_number, text)
-          wc_summary.add_file_data
+      summary_file_details_in_hash = { line_count: 0, word_count: 0, byte_count: 0 }
+      texts_in_line_after_read_stdin.each do |text|
+        if file_names_in_text == []
+          summary_text(summary_file_details_in_hash, text)
         elsif File.file?(text)
-          file_data = File.open(text)
-          file_contents_in_text = file_data.read # string
+          file_contents_in_text = File.open(text).read
 
-          wc_summary = Wc::SummaryFilesData.new(total_number, file_contents_in_text)
-          wc_summary.add_file_data
+          summary_text(summary_file_details_in_hash, file_contents_in_text)
 
           wc_text = Wc::Text.new(file_contents_in_text)
-          file_contents_in_text = wc_text.text_detail
+          texts_in_line_data << fileorfilesformalize(wc_text.text_detail, text)
 
-          wc_fileformalize = Wc::FileFormalize.new(file_contents_in_text, text)
-
-          formalized_text = ''
-          formalized_text = if with_l # (with_l = true)
-                              wc_fileformalize.only_with_line
-                            else
-                              wc_fileformalize.with_full
-                            end
-          text_in_line_data << formalized_text
           row += 1
         else
-          # p text_in_line_data
-          # p "wc: #{text}: open: No such file or directory"
           puts "wc: #{text}: open: No such file or directory"
           row += 1
-          # p text_in_line_data
         end
       end
-      # p text_in_line_data
-      if row >= 2
-        wc_fileformalize = Wc::FileFormalize.new(total_number, 'total')
-        formalized_text = if with_l
-                            wc_fileformalize.only_with_line
-                          else
-                            wc_fileformalize.with_full
-                          end
-      end
+      fileorfilesformalize(summary_file_details_in_hash, 'total') if row >= 2
 
-      if argv == []
-        wc_fileformalize = Wc::FileFormalize.new(total_number, '')
-        formalized_text = if with_l
-                            wc_fileformalize.only_with_line
-                          else
-                            wc_fileformalize.with_full
-                          end
+      fileorfilesformalize(summary_file_details_in_hash, '') if file_names_in_text == []
+    end
+
+    private
+
+    def summary_text(text_data_in_hash, text)
+      wc_summary = Wc::SummaryFilesData.new(text_data_in_hash, text)
+      wc_summary.add_file_data
+    end
+
+    def fileorfilesformalize(summary_file_details_in_hash, with_total_expression)
+      wc_fileformalize = Wc::FileFormalize.new(summary_file_details_in_hash, with_total_expression)
+      if with_l
+        wc_fileformalize.only_with_line
+      else
+        wc_fileformalize.with_full
       end
     end
   end
@@ -127,19 +107,19 @@ end
 
 module Wc
   class SummaryFilesData
-    attr_reader :total_number, :file_name_in_text, :wc_text
+    attr_reader :summary_file_details_in_hash, :file_name_in_text, :wc_text
 
-    def initialize(total_number, file_name_in_text)
+    def initialize(summary_file_details_in_hash, file_name_in_text)
       wc_text = Wc::Text.new(file_name_in_text)
       @wc_text = wc_text
-      @total_number = total_number
+      @summary_file_details_in_hash = summary_file_details_in_hash
       @file_name_in_text = file_name_in_text
     end
 
     def add_file_data
-      total_number[:line_count] += wc_text.text_detail[:line_count]
-      total_number[:word_count] += wc_text.text_detail[:word_count]
-      total_number[:byte_count] += wc_text.text_detail[:byte_count]
+      summary_file_details_in_hash[:line_count] += wc_text.text_detail[:line_count]
+      summary_file_details_in_hash[:word_count] += wc_text.text_detail[:word_count]
+      summary_file_details_in_hash[:byte_count] += wc_text.text_detail[:byte_count]
     end
   end
 end
@@ -154,14 +134,25 @@ module Wc
     end
 
     def with_full
-      puts "#{detailed_info_in_hash[:line_count].to_s.rjust(8)}#{detailed_info_in_hash[:word_count].to_s.rjust(8)}#{detailed_info_in_hash[:byte_count].to_s.rjust(8)} #{file_name_in_text}"
+      line_count = format(detailed_info_in_hash[:line_count])
+      word_count = format(detailed_info_in_hash[:word_count])
+      byte_count = format(detailed_info_in_hash[:byte_count])
+      puts "#{line_count}#{word_count}#{byte_count} #{file_name_in_text}"
     end
 
     def only_with_line
-      puts "#{detailed_info_in_hash[:line_count].to_s.rjust(8)} #{file_name_in_text}"
+      line_count = format(detailed_info_in_hash[:line_count])
+      puts "#{line_count} #{file_name_in_text}"
+    end
+
+    private
+
+    WIDTH = 8
+    def format(text)
+      text.to_s.rjust(WIDTH)
     end
   end
 end
 
 main = Wc::Main.new
-main.wc_operation
+main.operate_wc
