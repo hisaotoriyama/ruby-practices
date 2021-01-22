@@ -1,12 +1,12 @@
 # !/usr/bin/env ruby
 # frozen_string_literal: true
 
-require './wc_textsexpression'
+require './formatter'
 
 module Wc
   class Main
     def operate_wc
-      Wc::TextsExpression.new.expression
+      Wc::Formatter.new.format
     end
   end
 end

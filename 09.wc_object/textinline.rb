@@ -5,19 +5,19 @@ require 'optparse'
 
 module Wc
   class TextsInLine
-    attr_reader :file_names_in_text, :with_l
+    attr_reader :file_names, :with_l
 
     def initialize
       opt = OptionParser.new
       opt.on('-l') { |v| @with_l = v }
-      @file_names_in_text = opt.parse!(ARGV)
+      @file_names = opt.parse!(ARGV)
     end
 
     def read_stdin
-      if file_names_in_text.empty?
+      if file_names.empty?
         $stdin.readlines
       else
-        file_names_in_text
+        file_names
       end
     end
   end
