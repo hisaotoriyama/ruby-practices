@@ -8,8 +8,6 @@ require './filecontent'
 
 module Wc
   class Formatter
-    attr_reader :stdin_texts_in_line, :file_names, :with_l
-
     def initialize
       texts_in_line = Wc::TextsInLine.new
       stdin_texts_in_line = texts_in_line.read_stdin
@@ -21,8 +19,8 @@ module Wc
     def format
       row = 0
       sum_hashed_file_detail = { line_count: 0, word_count: 0, byte_count: 0 }
-      stdin_texts_in_line.each do |text|
-        if file_names == []
+      @stdin_texts_in_line.each do |text|
+        if @file_names == []
           summarize_text(sum_hashed_file_detail, text)
         elsif File.file?(text)
           file_contents_in_text = File.open(text).read
@@ -41,7 +39,7 @@ module Wc
       end
       format_file_or_files(sum_hashed_file_detail, 'total') if row >= 2
 
-      format_file_or_files(sum_hashed_file_detail, '') if file_names == []
+      format_file_or_files(sum_hashed_file_detail, '') if @file_names == []
     end
 
     private
@@ -53,7 +51,7 @@ module Wc
 
     def format_file_or_files(sum_hashed_file_detail, with_total)
       wc_filecontent = Wc::FileContent.new(sum_hashed_file_detail, with_total)
-      if with_l
+      if @with_l
         wc_filecontent.only_with_line
       else
         wc_filecontent.with_full
