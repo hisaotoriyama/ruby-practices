@@ -1,10 +1,10 @@
 # !/usr/bin/env ruby
 # frozen_string_literal: true
 
-require './textinline'
+require './text_in_line'
 require './text'
-require './summaryfilesdata'
-require './filecontent'
+require './summary_files_data'
+require './file_content'
 
 module Wc
   class Formatter
