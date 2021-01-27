@@ -5,10 +5,11 @@ require './text'
 
 module Wc
   class SummaryFilesData
+    attr_reader :sum_hashed_file_detail
+
     def initialize(sum_hashed_file_detail, file_name)
       @wc_text = Wc::Text.new(file_name)
       @sum_hashed_file_detail = sum_hashed_file_detail
-      @file_name = file_name
     end
 
     def add_file_data

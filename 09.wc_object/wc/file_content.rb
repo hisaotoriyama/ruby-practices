@@ -10,14 +10,14 @@ module Wc
       @file_name = file_name
     end
 
-    def with_full
+    def show_with_full
       line_count = format_file(hashed_file_detail[:line_count])
       word_count = format_file(hashed_file_detail[:word_count])
       byte_count = format_file(hashed_file_detail[:byte_count])
       puts "#{line_count}#{word_count}#{byte_count} #{file_name}"
     end
 
-    def only_with_line
+    def show_only_with_line
       line_count = format_file(hashed_file_detail[:line_count])
       puts "#{line_count} #{file_name}"
     end
