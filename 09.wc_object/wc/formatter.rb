@@ -1,7 +1,7 @@
 # !/usr/bin/env ruby
 # frozen_string_literal: true
 
-require './texts_in_line'
+require './data_open'
 require './text'
 require './file_content'
 

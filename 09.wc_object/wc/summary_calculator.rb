@@ -1,14 +1,14 @@
 # !/usr/bin/env ruby
 # frozen_string_literal: true
 
-require './texts_in_line'
+require './data_open'
 require './summary_files_data'
 
 module Wc
   class SummaryCalculator
-    def initialize(file_names_or_texts_in_line, sum_hashed_file_detail)
+    def initialize(file_names_or_texts_in_line)
       @file_names_or_texts_in_line = file_names_or_texts_in_line
-      @sum_hashed_file_detail = sum_hashed_file_detail
+      @sum_hashed_file_detail = { line_count: 0, word_count: 0, byte_count: 0 }
     end
 
     # stdinの場合
