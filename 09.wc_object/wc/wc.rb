@@ -18,7 +18,6 @@ module Wc
 
     def operate_wc
       if @file_names_in_line
-        p @file_names_in_line
         @summary_calculator_file = Wc::SummaryCalculator.new(@file_names_in_line)
         @formatter_file = Wc::Formatter.new(@file_names_in_line, @with_l)
         Wc::Result.new(@file_names, @summary_calculator_file, @formatter_file).show_result
