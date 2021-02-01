@@ -2,12 +2,12 @@
 # frozen_string_literal: true
 
 module Wc
-  class Text
+  class TextDetailCalc
     def initialize(text)
       @text = text
     end
 
-    def text_detail
+    def hashed_text_detail
       {
         line_count: @text.lines.size,
         word_count: @text.split(' ').size,
