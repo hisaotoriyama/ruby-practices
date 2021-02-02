@@ -21,12 +21,12 @@ module Wc
       line_count = format_rjust(@hashed_file_detail[:line_count])
       word_count = format_rjust(@hashed_file_detail[:word_count])
       byte_count = format_rjust(@hashed_file_detail[:byte_count])
-      puts "#{line_count}#{word_count}#{byte_count} #{@file_name_or_total}"
+      "#{line_count}#{word_count}#{byte_count} #{@file_name_or_total}"
     end
 
     def show_only_with_line
       line_count = format_rjust(@hashed_file_detail[:line_count])
-      puts "#{line_count} #{@file_name_or_total}"
+      "#{line_count} #{@file_name_or_total}"
     end
 
     private

@@ -17,20 +17,20 @@ module Wc
 
     def operate_wc
       if @input_processor.file_names_in_line.empty?
-        summary_for_stdin
+        show_summary_for_stdin
       else
-        show_files_details_and_summary_for_file_names
+        show_summary_for_file_names
       end
     end
 
     private
 
-    def summary_for_stdin
+    def show_summary_for_stdin
       @summary_calc = Wc::Stdin::SummaryCalc.new(@input_processor.stdin_texts_in_line)
       Wc::Stdin::Result.new(@summary_calc, @input_processor.with_l).show_result
     end
 
-    def show_files_details_and_summary_for_file_names
+    def show_summary_for_file_names
       Wc::FileNames::ResultForEachFileDetail.new(@input_processor.file_names_in_line, @input_processor.with_l).show_detail_each_file
 
       @summary_calc = Wc::FileNames::SummaryCalc.new(@input_processor.file_names_in_line)
