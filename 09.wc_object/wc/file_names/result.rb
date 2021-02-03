@@ -10,7 +10,7 @@ module Wc
       end
 
       def show_result
-        puts Wc::Formatter.new(@summary_calc.summarize_text_in_file_names, 'total', @with_l).format_file_or_files
+        puts Wc::Printer.new(@summary_calc.summarize_text_in_file_names, 'total', @with_l).format_file_or_files
       end
     end
   end

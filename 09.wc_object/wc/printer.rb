@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 module Wc
-  class Formatter
+  class Printer
     def initialize(hashed_file_detail, file_name_or_total, with_l)
       @hashed_file_detail = hashed_file_detail
       @file_name_or_total = file_name_or_total

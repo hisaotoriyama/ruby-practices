@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 require './input_processor'
-require './formatter'
 require './stdin/summary_calc'
 require './stdin/result'
 require './file_names/result'
